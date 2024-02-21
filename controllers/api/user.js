@@ -22,34 +22,29 @@ const auth = async (req, res, next) => {
 const createUser = async (req, res, next) => {
     try {
         const user = await User.create(req.body)
-        const token = createJWT(user)
-        res.locals.data.user = user
-        res.locals.data.token = token 
+        const token = await user.generateAuthToken()
+        res.json({ user, token })
         next()
     } catch (error) {
         res.status(400).json({ msg: error.message })
     }
 }
 
-// router.post('/login', userCtrl.loginUser)
 
-const loginUser = async (req, res, next) => {
-    try {
-    const user = await User.findOne({ email: req.body.email})
-    if (!user) throw new Error ('user nor found, email invalid')
-    const password = crypto.createHmac('sha256', process.env.SECRET).update(req.body.password).digest('hex').split('').reverse().join('')
-    const match = await bcrypt.compare(password, user.password)
-    if(!match) throw new Error('password invalid')
-    res.locals.data.user = user
-    res.locals.data.token = createJWT(user)
-    next()
-    } catch (error) {
-    res.status(400).json({ msg: error.message })
+ const loginUser = async (req, res) => {
+    try{
+      const user = await User.findOne({ email: req.body.email })
+      if (!user || !await bcrypt.compare(req.body.password, user.password)) {
+        res.status(400).send('Invalid login credentials')
+      } else {
+        const token = await user.generateAuthToken()
+        res.json({ user, token })
+      }
+    } catch(error){
+      res.status(400).json({message: error.message})
     }
-}
+  }
 
-
-// router.put('/:id', userCtrl.auth, userCtrl.updateUser)
 
 const updateUser = async (req, res, next) => {
     try {
@@ -57,39 +52,30 @@ const updateUser = async (req, res, next) => {
         const user = await User.findOne({ _id: req.params.id})
         updates.forEach(update => user[update] = req.body[update])
         await user.save()
-        //problem maybe w/ update
-        res.locals.data.user = user 
+        res.json(user)
+        next()
     } catch (error) {
         res.status(400).json({ msg: error.message })
     }
 }
 
-// router.delete('/:id', userCtrl.auth, userCtrl.deleteUser) 
 
-const deleteUser = async (req, res, next) => {
+const deleteUser = async (req, res) => {
     try {
         await req.user.deleteOne()
+        res.json({ msg: 'user deleted' })
     } catch (error) {
         res.status(400).json({ msg: error.message })
     }
 }
 
-const respondWithToken = (req, res) => {
-    res.json(res.locals.data.token)
-}
-
-const respondWithUser = (req, res) => {
-    res.json(res.locals.data.user)
-}
 
 module.exports = {
     auth, 
     createUser,
     loginUser,
     updateUser,
-    deleteUser, 
-    respondWithToken,
-    respondWithUser
+    deleteUser
 }
 
 function createJWT(user){
