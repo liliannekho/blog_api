@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import styles from './UpdateForm.module.scss'
 
 export default function Blogs(props) {
     return(<div>

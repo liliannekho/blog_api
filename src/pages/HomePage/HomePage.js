@@ -1,6 +1,7 @@
 import {useState, useEffect} from 'react'
 import CreateForm from '../../components/CreateForm/CreateForm'
 import Blogs from '../../components/Blogs/Blogs'
+import './HomePage.module.scss'
 
 export default function HomePage (props){
     const [blogs, setBlogs] = useState([])

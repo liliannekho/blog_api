@@ -1,0 +1,42 @@
+// HomePage.scss
+
+.homepage-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .title {
+    font-size: 2em;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .create-form {
+    margin-bottom: 20px;
+  }
+  
+  .blogs-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-gap: 20px;
+  }
+  
+  .blog-card {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .blog-title {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #444;
+    margin-bottom: 10px;
+  }
+  
+  .blog-content {
+    color: #666;
+  }
+  

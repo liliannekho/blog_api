@@ -1,5 +1,5 @@
 import {useState} from 'react'
-
+import styles from './CreateForm.module.scss'
 
 export default function CreateForm(props) {
     const [ formData, setFormData ] = useState({

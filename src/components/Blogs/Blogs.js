@@ -1,3 +1,5 @@
+import styles from './Blogs.module.scss'
+
 export default function Blogs(props) {
     return(<div>
         {props.blogs.map((blog) => {
